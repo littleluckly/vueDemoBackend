@@ -10,6 +10,8 @@ db.query = function(sql,fallback){
     connection.connect(function(err){
         if(err){
             conosle.log(err)
+        }else{
+            console.log('数据库连接成功')
         }
         return;
     });
@@ -30,3 +32,4 @@ db.query = function(sql,fallback){
 
 }
 module.exports=db;
+// export default db;
