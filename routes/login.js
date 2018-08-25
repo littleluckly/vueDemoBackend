@@ -22,7 +22,7 @@ router.post('/signUp', function(req, res, next){
 			res.send({status:'err',msg:"当前用户已存在"})
 		}else{
 			db.query(`INSERT INTO users (username, pass) VALUES ( "${username}", "${pass}")`, function(result){
-				setTimeout(()=>{res.send({status:'ok'})},2000)
+				res.send({status:'ok'})
 			})
 		}
 	})
