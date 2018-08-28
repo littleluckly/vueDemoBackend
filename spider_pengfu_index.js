@@ -19,18 +19,7 @@ function fetchPage(url){
     firstRequest(url)
 }
 
-function firstRequest(url){ 
-    // var authorName = 'authorName';
-    // var authorImgSrc = 'authorImgSrc';
-    // var laughTitle = 'laughTitle';
-    // var laughImgSrc = '';
-    // var laughText = '    前天， 乡下的大表叔给我打来电话，说是中秋快到了，给我寄了礼物。我很开心，被家人惦记的感 觉真好。今天我接到快递，拆开一看是两盒廉价包装的月饼，仔细又看了一下，卧槽！这不是我去年给他的吗？';
-    // var type = 'text';
-    // db.query(`INSERT INTO laugh (authorName, authorImgSrc, laughTitle, laughImgSrc, laughText, type) VALUES ( "${authorName}", "${authorImgSrc}", "${laughTitle}", "${laughImgSrc}", "${laughText}", "${type}" )`, function(result){
-    //     console.log('1',result) 
-    // }) 
-
-
+function firstRequest(url){  
     https.get(url, function(res){
         var html=''; 
         res.setEncoding('utf-8');

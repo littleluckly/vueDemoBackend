@@ -32,8 +32,7 @@ router.use('/hot', (req, res, next) => {
 			data: result
 		}
 		if(result.length>0){
-			db.query('SELECT count(*) FROM laugh ', (result2) => {
-				console.log('result22',result2)
+			db.query('SELECT count(*) FROM laugh ', (result2) => { 
 				res.send({...resData, total: result2[0]['count(*)']})
 			})
 		}else{
