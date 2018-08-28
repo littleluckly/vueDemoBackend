@@ -11,7 +11,7 @@ var path = require('path')
 var express = require('express');
 var router = express.Router();
 var db = require('./utils/db.js');
-var i = 1;
+var i = 6;
 
 var firstUrl = `https://www.pengfu.com/index_${i}.html`;
 
@@ -39,6 +39,7 @@ function firstRequest(url){
         });
         res.on('end',function(){
             var $ =  cheerio.load(html); 
+            var len = $('.list-item').length-1;
             $('.list-item').each(function(idx, item){
                 var type='',laughImgSrc='',laughText='';
                 var authorName = $(this).find('dd .user_name_list>a').text(); 
@@ -49,19 +50,16 @@ function firstRequest(url){
                     type = 'img'
                 }else{
                     type = 'text'; 
-                    laughText = '&nbsp;&nbsp;&nbsp;&nbsp;'+$(this).find('.content-img').text().trim()
-                } 
-                console.log(i,'iiiiiiiiiiiiiii')
-
-                console.log(`https://www.pengfu.com/index_${i}.html`) 
+                    laughText = $(this).find('.content-img').text().trim()
+                }   
                 db.query(`INSERT INTO laugh (authorName, authorImgSrc, laughTitle, laughImgSrc, laughText, type) VALUES ( "${authorName}", "${authorImgSrc}", "${laughTitle}", "${laughImgSrc}", "${laughText}", "${type}" )`, function(result){ 
-                    if(i<50){
+                    if( (idx >= len) && i<15 ){ 
                         i += 1;
+                        console.log(`idx-${idx},,,,,len-${len},,,,,,i-${i},,,,,https://www.pengfu.com/index_${i}.html`) 
                         firstRequest(`https://www.pengfu.com/index_${i}.html`)
-                    }
-                }) 
-            }) 
-             
+                    } 
+                })  
+            })  
         })
     })
 
