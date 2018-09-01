@@ -3,12 +3,13 @@ var router = express.Router();
 var db = require('../utils/db.js')
 
 router.post('/signIn', (req, res, next) => {
-	const { pass, username } = req.body;
+	const { pass, username } = req.body; 
 	db.query(`SELECT * FROM users WHERE pass="${pass}" AND username="${username}"`, function(result){
-		if(result&&result.length>0){
-			console.log('req',req)
-			req.cookies.user=`${username}`
+		if(result&&result.length>0){ 
+			res.cookie('username',username)
+			res.cookie('auth',username) 
 			res.send({status:'ok'});
+
 		}else{
 			res.send({status:'err',msg:"用户名或者密码不对"})
 		}
@@ -26,21 +27,12 @@ router.post('/signUp', function(req, res, next){
 			})
 		}
 	})
-})
-router.use('/hot', (req, res, next) => {
-	const { pageNo, pageSize } = req.body;
-	db.query(`SELECT * FROM laugh limit ${pageNo-1}, ${pageSize}`,(result)=>{
-		var resData = {
-			data: result
-		}
-		if(result.length>0){
-			db.query('SELECT count(*) FROM laugh ', (result2) => {
-				res.send({...resData, total: result2[0]['count(*)']})
-			})
-		}else{
-			res.send({data:[]})
-		}
-	})
+}) 
+
+router.get('/logout', (req, res, next) => {
+	res.clearCookie('auth');
+	res.clearCookie('username')
+	res.send('ok')
 })
 
 module.exports = router;

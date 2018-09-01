@@ -34,11 +34,11 @@ for(var i=0; i<100; i++){
   sessionKeys.push('slkdjflskf_'+Math.random()*10)
 }
 
-// app.use(cookieSession({
-//   name:'seesionId',
-//   keys:sessionKeys,
-//   maxAge:24*60*60*1000
-// }))
+app.use(cookieSession({
+  name:'seesionId',
+  keys:sessionKeys,
+  maxAge:24*60*60*1000
+}))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
