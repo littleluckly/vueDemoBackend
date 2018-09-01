@@ -6,6 +6,8 @@ router.post('/signIn', (req, res, next) => {
 	const { pass, username } = req.body;
 	db.query(`SELECT * FROM users WHERE pass="${pass}" AND username="${username}"`, function(result){
 		if(result&&result.length>0){
+			console.log('req',req)
+			req.cookies.user=`${username}`
 			res.send({status:'ok'});
 		}else{
 			res.send({status:'err',msg:"用户名或者密码不对"})
@@ -32,7 +34,7 @@ router.use('/hot', (req, res, next) => {
 			data: result
 		}
 		if(result.length>0){
-			db.query('SELECT count(*) FROM laugh ', (result2) => { 
+			db.query('SELECT count(*) FROM laugh ', (result2) => {
 				res.send({...resData, total: result2[0]['count(*)']})
 			})
 		}else{
