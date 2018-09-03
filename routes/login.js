@@ -20,6 +20,8 @@ router.post('/signUp', function(req, res, next){
 	const { pass, username } = req.body;
 	db.query(`SELECT * FROM users WHERE username="${username}"`, (result)=>{
 		if(result.length>0){
+			res.cookie('username',username)
+			res.cookie('auth',username) 
 			res.send({status:'err',msg:"当前用户已存在"})
 		}else{
 			db.query(`INSERT INTO users (username, pass) VALUES ( "${username}", "${pass}")`, function(result){

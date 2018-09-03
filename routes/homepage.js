@@ -18,23 +18,37 @@ router.use('/hot', (req, res, next) => {
 	})
 });
 
+// 点赞点踩
 router.post('/like', (req,res, next) => {
 	const { laughId, type } = req.body;
-	const { username } = req.cookies;
-	console.log(laughId, type,username )
-	// if(type=="like"){ 	
-		db.query(`SELECT * from users WHERE userName="${username}"`,(result)=>{
-			const userId = result[0].id; 
-			db.query(`SELECT * from laugh_users WHERE user_id="${userId}" AND laugh_id="${laughId}"`,(result2)=>{
-				if(result2.length===0){
-					db.query(`INSERT INTO laugh_users (laugh_id, user_id, type) VALUES ("${laughId}", "${userId}", ${type=="like"?1:0})`,(result3)=>{
-						res.send(result3)
-					})
-				}else{
-					res.send({err:'您已经点过赞了！'})
-				}
-			})  
-		}) 
+	const { username } = req.cookies; 
+	db.query(`SELECT * from users WHERE userName="${username}"`,(result)=>{
+		const userId = result[0].id; 
+		db.query(`SELECT * from laugh_users WHERE user_id="${userId}" AND laugh_id="${laughId}"`,(result2)=>{
+			if(result2.length===0){
+				db.query(`INSERT INTO laugh_users (laugh_id, user_id, type) VALUES ("${laughId}", "${userId}", ${type=="like"?1:0})`,(result3)=>{
+					res.send(result3)
+				})
+			}else{
+				res.send({err:'您已经点过赞了！'})
+			}
+		})  
+	}) 
+})
+
+// 评论
+router.post('/comment', (req, res, next) => {
+	const { content, laughId } = req.body;
+	const { username } = req.cookies;  
+	console.log(username,'username')
+	db.query(`SELECT * from users WHERE userName="${username}"`,(result)=>{
+		const userId = result[0].id;  
+		console.log(userId,'userId')
+		db.query(`INSERT INTO laugh_user_comment (laugh_id, user_id, content, create_time)
+		VALUES (${laughId}, ${userId}, "${content}", NOW() )`,(result3)=>{ 
+			res.send({status:'ok',msg:''})
+		})
+	})
 })
 
 module.exports = router;
