@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../utils/db.js')
+let jwt = require('jsonwebtoken')
 
 router.use('/hot', (req, res, next) => {
 	const { pageNo, pageSize } = req.body;
+	console.log('pageNo, pageSize',pageNo, pageSize,req.cookies)
 	db.query(`SELECT a.*, SUM(CASE  WHEN b.type = 1 OR b.type = 0 THEN 1 ELSE 0 END) AS allLike, SUM(CASE  WHEN b.type = 1 THEN 1 ELSE 0 END) AS likeCount , SUM(CASE  WHEN b.type = 0 THEN 1 ELSE 0 END) AS dislikeCount FROM laugh a LEFT JOIN laugh_users b ON a.id = b.laugh_id GROUP BY a.id LIMIT ${(pageNo-1)*pageSize}, ${pageSize}`,(result)=>{
 		var resData = {
 			data: result
