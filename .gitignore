@@ -18,3 +18,4 @@ nexus.crt
 /.vscode/
 /node_modules*/
 /src/server/api/proxy-target.js
+vue-element-admin/
