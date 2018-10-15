@@ -18,17 +18,35 @@ db.query = function(sql,fallback){
     if(!sql){
         return;
     }
-    connection.query(sql, function (err, rows, fields) {
-        if(err){return;}
-        fallback(rows)
-    });
-    connection.end(function (err) {
-        if(err){
-            return ;
-        }else{
-            console.log('关闭连接')
-        }
-     })
+    return new Promise((resolve, reject)=>{
+        connection.query(sql, function (err, rows, fields) {
+            if(err){return;}
+                resolve(rows)
+            // fallback(rows)
+        });
+        connection.end(function (err) {
+            if(err){
+                return ;
+            }else{
+                console.log('关闭连接')
+            }
+         })
+    })
+    // connection.query(sql, function (err, rows, fields) {
+    //     // if(err){return;}
+    //     console.log('rowsssssss',rows)
+    //     return new Promise((resolve,reject)=>{
+    //         resolve(rows)
+    //     })
+    //     // fallback(rows)
+    // });
+    // connection.end(function (err) {
+    //     if(err){
+    //         return ;
+    //     }else{
+    //         console.log('关闭连接')
+    //     }
+    //  })
 
 }
 module.exports=db;

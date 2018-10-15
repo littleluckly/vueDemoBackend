@@ -15,5 +15,8 @@ router.post('/center', function(req, res, next) {
   console.log(req)
   res.send('post用户中心');
 });
+router.post('/updateUserInfo', (req,res,next)=>{
+  res.send({msg:'修改成功'})
+})
 
 module.exports = router;

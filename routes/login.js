@@ -10,36 +10,33 @@ function generateToken(data){
 	  return token;
 }
 
-router.post('/signIn', (req, res, next) => {
+router.post('/signIn', async (req, res, next) => {
 	const { pass, username } = req.body;
-	db.query(`SELECT * FROM users WHERE pass="${pass}" AND username="${username}"`, function(result){
-		if(result&&result.length>0){
-			// var token = jwt.sign({ foo: 'bar' }, { algorithm: 'RS256'});
-			let token = generateToken({username})
-			res.cookie('username',username)
-			res.cookie('token',token)
-			res.send({status:'ok'});
-		}else{
-			res.send({status:'err',msg:"用户名或者密码不对"})
-		}
-	})
+	const result = await db.query(`SELECT * FROM users WHERE pass="${pass}" AND username="${username}"`);
+	if(result&&result.length>0){
+		// var token = jwt.sign({ foo: 'bar' }, { algorithm: 'RS256'});
+		let token = generateToken({username})
+		res.cookie('username',username)
+		res.cookie('token',token)
+		res.send({status:'ok'});
+	}else{
+		res.send({status:'err',msg:"用户名或者密码不对"})
+	}
 });
 
-router.post('/signUp', function(req, res, next){
+router.post('/signUp', async (req, res, next) => {
 	const { pass, username } = req.body;
-	db.query(`SELECT * FROM users WHERE username="${username}"`, (result)=>{
-		if(result.length>0){
-			res.cookie('username',username)
-			res.send({status:'err',msg:"当前用户已存在"})
-		}else{
-			db.query(`INSERT INTO users (username, pass) VALUES ( "${username}", "${pass}")`, function(result){
-				res.send({status:'ok'})
-			})
-		}
-	})
+	const result = db.query(`SELECT * FROM users WHERE username="${username}"`);
+	if(result.length>0){
+		res.cookie('username',username)
+		res.send({status:'err',msg:"当前用户已存在"})
+	}else{
+		const result2 = await db.query(`INSERT INTO users (username, pass) VALUES ( "${username}", "${pass}")`);
+		res.send({status:'ok',msg:result2});
+	}
 })
 
-router.get('/logout', (req, res, next) => { 
+router.get('/logout', (req, res, next) => {
 	res.clearCookie('username')
 	res.send('ok')
 })
