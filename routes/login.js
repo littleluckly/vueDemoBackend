@@ -28,11 +28,13 @@ router.post('/signUp', async (req, res, next) => {
 	const { pass, username } = req.body;
 	const result = db.query(`SELECT * FROM users WHERE username="${username}"`);
 	if(result.length>0){
-		res.cookie('username',username)
 		res.send({status:'err',msg:"当前用户已存在"})
 	}else{
-		const result2 = await db.query(`INSERT INTO users (username, pass) VALUES ( "${username}", "${pass}")`);
-		res.send({status:'ok',msg:result2});
+		await db.query(`INSERT INTO users (username, pass) VALUES ( "${username}", "${pass}")`);
+		let token = generateToken({username})
+		res.cookie('username',username)
+		res.cookie('token',token)
+		res.send({status:'ok'});
 	}
 })
 

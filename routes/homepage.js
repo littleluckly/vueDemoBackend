@@ -22,7 +22,6 @@ router.post('/like', async (req,res, next) => {
 	const { laughId, type, likeType } = req.body;
 	const { username } = req.cookies;
 	const userId = await getUserId(username,res);
-	console.log('userId333---',userId)
 	if(userId){
 		let sql = ''
 		let val = null;
@@ -38,15 +37,16 @@ router.post('/like', async (req,res, next) => {
 				val = type==="dislike"?0:1;
 				sql = `UPDATE laugh_users b SET b.type=${val} WHERE b.laugh_id=${laughId} AND b.user_id=${userId}; `
 				const result2 = await db.query(sql)
-				res.send(result2)
+				res.send({status:'ok'})
 			}else{
 				sql = `INSERT INTO laugh_users (laugh_id, user_id, type) VALUES ("${laughId}", "${userId}", ${type=="like"?1:0})`
 				const result3 = await db.query(sql)
-				res.send(result3)
+				res.send({status:'ok'})
 			}
 			return;
 		}
-		res.send(db.query(sql))
+		await db.query(sql);
+		res.send({status:'ok'})
 	}
 
 
