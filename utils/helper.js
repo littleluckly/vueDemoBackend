@@ -1,6 +1,7 @@
-const db = require('./db.js')
+const db = require('./db.js');
+
 const getUserId = async (username,res)=>{
-    const result = await db.query(`SELECT * from users WHERE userName="${username}"`)
+    const result = await db.query(`SELECT * from users WHERE username="${username}"`)
     if(result.length>0){
         return result[0].id
     }else{
@@ -9,5 +10,5 @@ const getUserId = async (username,res)=>{
 }
 
 module.exports = {
-    getUserId
+    getUserId,
 }

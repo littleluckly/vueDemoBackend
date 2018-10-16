@@ -5,7 +5,7 @@ let jwt = require('jsonwebtoken')
 var db = require('../utils/db.js')
 const { getUserId }= require('../utils/helper')
 
-router.use('/hot', async(req, res, next) => {
+router.use('/hot', async(req, res, next) => { 
 	const { pageNo, pageSize } = req.body;
 	const { username } = req.cookies;
 	const userId = await getUserId(username,res);

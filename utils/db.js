@@ -21,7 +21,13 @@ db.query = function(sql,fallback){
     return new Promise((resolve, reject)=>{
         connection.query(sql, function (err, rows, fields) {
             if(err){return;}
+            if(Object.prototype.toString.call(rows)==="[object Object]"){
+                resolve({status: rows.affectedRows===0?'fail':'ok'})
+            }else{
+                console.log(rows)
                 resolve(rows)
+            }
+
             // fallback(rows)
         });
         connection.end(function (err) {

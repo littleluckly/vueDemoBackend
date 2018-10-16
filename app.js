@@ -10,6 +10,7 @@ var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 var homepageRouter = require('./routes/homepage');
 var militaryRouter = require('./routes/militaryNews');
+var docRouter = require('./routes/doc');
 
 var app = express();
 
@@ -54,7 +55,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/homepage', homepageRouter);
 app.use('/login', loginRouter);
-app.use('/militaryNews', militaryRouter)
+app.use('/militaryNews', militaryRouter);
+app.use('/doc', docRouter);
 
 var sessionKeys = [];
 for (var i = 0; i < 100; i++) {
