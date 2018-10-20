@@ -5,7 +5,7 @@ let jwt = require('jsonwebtoken')
 var db = require('../utils/db.js')
 const { getUserId }= require('../utils/helper')
 
-router.use('/hot', async(req, res, next) => { 
+router.use('/hot', async(req, res, next) => {
 	const { pageNo, pageSize } = req.body;
 	const { username } = req.cookies;
 	const userId = await getUserId(username,res);
@@ -47,40 +47,7 @@ router.post('/like', async (req,res, next) => {
 		}
 		await db.query(sql);
 		res.send({status:'ok'})
-	}
-
-
-	// db.query(`SELECT * from users WHERE userName="${username}"`,(result)=>{
-	// 	const userId = result[0].id;
-	// 	let sql = ''
-	// 	let val = null;
-	// 	if(likeType===1){
-	// 		val = type==="like"?null:0;
-	// 		sql = `UPDATE laugh_users b SET b.type=${val} WHERE b.laugh_id=${laughId} AND b.user_id=${userId}; `
-	// 	}else if( likeType===0 ){
-	// 		val = type==="dislike"?null:1;
-	// 		sql = `UPDATE laugh_users b SET b.type=${val} WHERE b.laugh_id=${laughId} AND b.user_id=${userId}; `
-	// 	}else{
-	// 		db.query(`SELECT * from laugh_users l WHERE l.user_id=${userId} AND l.laugh_id=${laughId}`,(result2)=>{
-	// 			if(result2.length>0){
-	// 				val = type==="dislike"?0:1;
-	// 				sql = `UPDATE laugh_users b SET b.type=${val} WHERE b.laugh_id=${laughId} AND b.user_id=${userId}; `
-	// 				db.query(sql,(result4)=>{
-	// 					res.send(result4)
-	// 				})
-	// 			}else{
-	// 				sql = `INSERT INTO laugh_users (laugh_id, user_id, type) VALUES ("${laughId}", "${userId}", ${type=="like"?1:0})`
-	// 				db.query(sql,(result5)=>{
-	// 					res.send(result5)
-	// 				})
-	// 			}
-	// 		})
-	// 		return;
-	// 	}
-	// 	db.query(sql,(result6)=>{
-	// 		res.send(result6)
-	// 	})
-	// })
+	} 
 })
 
 // 发表评论

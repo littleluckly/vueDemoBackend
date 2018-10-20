@@ -24,7 +24,7 @@ db.query = function(sql,fallback){
             if(Object.prototype.toString.call(rows)==="[object Object]"){
                 resolve({status: rows.affectedRows===0?'fail':'ok'})
             }else{
-                console.log(rows)
+                // console.log(rows)
                 resolve(rows)
             }
 

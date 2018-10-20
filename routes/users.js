@@ -54,7 +54,6 @@ router.post('/updateUserPwd', async (req, res, next) => {
   const { newPwd, oriPwd } = req.body;
   const { username } = req.cookies;
   const userInfo = await db.query(`SELECT u.* FROM users u WHERE u.username='${username}'`);
-  console.log(userInfo,userInfo[0].pass,oriPwd)
   if(oriPwd!==userInfo[0].pass){
     res.send({status:'fail',msg:'原密码不正确！'})
   }else{

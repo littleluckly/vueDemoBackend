@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session')
 var logger = require('morgan');
+var jwt = require('jsonwebtoken');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -32,25 +33,20 @@ app.use((req, res, next) => {
 	const {
 		token
 	} = req.cookies;
-	next()
-	// jwt.verify(token, 'secret', (succ, err) => {
-	// 	if (succ) {
-	// 		next()
-	// 	}else{
-	// 		console.log('过期了')
-	// 		// res.redirect('/login')
-	// 		next();
-	// 	}
-	// })
-	// try {
-	//   let decoded = jwt.verify(token, 'secret');
+	try {
+	  let decoded = jwt.verify(token, 'secret');
 	//   console.log('decoded',decoded)
-	//   next()
-	// } catch(err) {
-	//   // res.redirect('/login')
-	//   next()
-	// }
+	  next()
+	} catch(err) {
+	  if(req.url.indexOf('login')===-1){
+		  res.send({status:'4001',msg:'token过期啦~'})
+		  // res.redirect('/login')
+		}else{
+			next()
+	  	}
+	}
 })
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/homepage', homepageRouter);
